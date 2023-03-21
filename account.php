@@ -5,12 +5,9 @@ if (!isset($_SESSION['name'])) {
   exit();
 }
 
-
-
-/*  if(isset($_GET['logout']))
-logout(); */
+if (isset($_GET['logout']))
+  logout();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,10 +31,13 @@ logout(); */
   <main>
 
     <div class="container flex-center pt-5 flex-col relative">
-      <h3 class="title pb-3">Ciao <span class="uppercase"><?php echo $_SESSION['name'] ?></span> ecco i tuoi eventi
+      <h3 class="title pb-3">Ciao <span class="uppercase">
+          <?php echo $_SESSION['name'] ?>
+        </span> ecco i tuoi eventi
       </h3>
 
       <?php include __DIR__ . './views/layouts/events_list.php' ?>
+      <a href="?logout" class="btn logout"> Logout </a>
     </div>
 
   </main>

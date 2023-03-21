@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
- @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100;200;300;400;500;600;700;800;900;1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100;200;300;400;500;600;700;800;900;1000&display=swap');
 
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-family: 'Roboto Flex', sans-serif;
 }
 
-:root{
+:root {
   --bg-color: #d9e5f3;
   --primary-color: #134077;
   --btn-color: #0057ff;
@@ -16,12 +16,12 @@
 
 /* utilities */
 
-.debug{
+.debug {
   border: 1px solid firebrick;
   background-color: rosybrown
 }
 
-.container{
+.container {
   height: 100%;
   width: 100%;
 }
@@ -37,49 +37,49 @@
   flex-direction: column;
 }
 
-.form-container{
+.form-container {
   min-width: 400px;
   width: 800px;
   padding: 0 1rem;
 }
 
-.absolute{
+.absolute {
   position: absolute;
 }
 
-.relative{
+.relative {
   position: relative;
 }
 
-.uppercase{
+.uppercase {
   text-transform: uppercase;
 }
 
-.w-100{
+.w-100 {
   width: 100%;
 }
 
 /* paddings */
 
-.p-5{
+.p-5 {
   padding: 2rem;
 }
 
-.pt-5{
-  padding-top:2rem;
+.pt-5 {
+  padding-top: 2rem;
 }
 
-.pb-3{
-  padding-bottom:.75rem;
+.pb-3 {
+  padding-bottom: .75rem;
 }
 
-.pb-5{
-  padding-bottom:2rem;
+.pb-5 {
+  padding-bottom: 2rem;
 }
 
 /* body */
 
-body{
+body {
   background-color: var(--bg-color);
   min-height: 100vh;
 }
@@ -97,19 +97,19 @@ nav {
 
 /* login form */
 
-.login-form{
+.login-form {
   border: 1px solid var(--primary-color);
   background-color: #ffffff;
   border-radius: 1.2rem;
   z-index: 10;
 }
 
-.form-label{
+.form-label {
   font-size: .85rem;
   font-weight: 600;
 }
 
-.form-input{
+.form-input {
   height: 2rem;
   border: none;
   border-bottom: 1px solid #000;
@@ -117,14 +117,14 @@ nav {
   outline: none;
 }
 
-.cta{
+.cta {
   padding: 2rem 1rem 0;
   font-size: .9rem;
   font-weight: normal;
   text-align: center;
 }
 
-.cta>a{
+.cta>a {
   text-decoration: underline;
   font-weight: bold;
   cursor: pointer;
@@ -132,7 +132,7 @@ nav {
 
 /* button */
 
-.btn{
+.btn {
   background-color: #0057ff;
   color: #ffffff;
   text-transform: uppercase;
@@ -144,56 +144,64 @@ nav {
   border-radius: 1rem;
 }
 
-.btn:hover{
+.btn:hover {
   background-color: #4482ff;
 }
 
-.title{
+.btn.logout {
+  background-color: #e39518;
+  text-decoration: none;
+}
+
+.btn.logout:hover {
+  background-color: #e3b418;
+}
+
+
+.title {
   font-size: 1.75rem;
   color: var(--primary-color);
   font-weight: 600;
   text-align: center;
 }
 
-.error{
+.error {
   text-align: center;
   color: firebrick;
   padding: .75rem 0;
 }
 
-.fa-eye{
+.fa-eye {
   color: var(--btn-color);
   cursor: pointer;
 }
 
 /* row */
-.row{
-  width:80%;
+.row {
+  width: 90%;
   margin: 0 auto;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
   flex-wrap: wrap;
   gap: 5rem;
 }
 
 /* card */
-.card{
+.card {
   padding: 1.5rem;
   border: 1px solid var(--primary-color);
   background-color: #ffffff;
   border-radius: 1.2rem;
-  width: 350px;
+  max-width: 375px;
+  width: 30%;
   gap: .6rem;
-  
+
 }
 
-.event_title{
+.event_title {
   font-size: 1.75rem;
   font-weight: 700;
 }
 
-.event_date{
+.event_date {
   color: lightgrey;
   font-weight: 500;
   font-size: 1.25rem;
@@ -201,6 +209,17 @@ nav {
 
 /* media query */
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 1500px) {
+  .card {
+    width: 45%;
+  }
+}
 
+@media screen and (max-width: 960px) {
+  .card {
+    width: 85%;
+    max-width: 400px;
+    flex-shrink: 1;
+
+  }
 }
