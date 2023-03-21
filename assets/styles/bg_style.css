@@ -1,0 +1,54 @@
+
+.vector-1{
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  width: 100vw;
+}
+
+.vector-4 {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  z-index: 2;
+}
+
+.vector-5 {
+  bottom: 5vw;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  z-index: 1;
+}
+
+.spacecraft {
+  bottom: 4vw;
+  height: 22vh;
+  min-height: 10rem;
+  max-height: 20rem;
+  right: 10%;
+  z-index: 4;
+}
+
+.ellipse-13 {
+  top: 30vh;
+  aspect-ratio: 1/1;
+  z-index: 5;
+}
+
+.ellipse-12 {
+  top: 375px;
+  right: 3%;
+  aspect-ratio: 1/1;
+  z-index: 5;
+}
+
+/* media query */
+
+@media screen and (max-height: 800px){
+  .ellipse-12, .ellipse-13{
+    display: none;
+  }
+}
