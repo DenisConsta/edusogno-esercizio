@@ -2,13 +2,13 @@
 require __DIR__ . "/config.php";
 
 /**
- * connessione al DB
+ * DB connection
  */
 function connect()
 {
   $connection = new mysqli(SERVER, USERNAME, PASSWORD, DATABASE);
 
-  /* controlla se vi sono errori nella connessione e in caso stampa nel file "db_log.txt" l'errore  */
+  /* check if there are errors in the connection and print errors in "db_log.txt" file  */
 
   /* error */
   if ($connection->connect_errno != 0) {
@@ -49,30 +49,103 @@ function login($email, $password)
   $res = $stmt->get_result();
   $data = $res->fetch_assoc();
 
-  /* uncomment after registration */
-
- /*  
   if ($data == NULL)
     return "Errore nelle credenziali inserite";
 
+    /* check if psw match with hashed_psw */
   if (password_verify($password, $data["password"]) == FALSE)
     return "Errore nelle credenziali inserite";
   else {
     $_SESSION['email'] = $email;
-    $_SESSION['name'] = $data["nome"];
-    
+    $_SESSION['name'] = $data["nome"];    
     header("location: account.php");
-
     exit();
-  } */
+  }
+}
 
-  /* TEMP */
+/**
+ * @param string $email
+ * @param string $name
+ * @param string $lastname
+ * @param string $password
+ */
+function register($email, $name, $lastname, $password)
+{
+  $connection = connect();
+  /* user's input values */
+  $args = func_get_args();
 
-  if($password == $data["password"]){
-    $_SESSION['email'] = $email;
-    header("location: pages/account.php");
+  /* array trimmed values */
+  $args = array_map(function ($x) {
+    return trim($x);
+  }, $args);
 
-    exit();
-  }else return "Errore nelle credenziali inserite";
+  /* check empty fields */
+  foreach ($args as $x) {
+    if (empty($x)) {
+      return "Compliare tutti i campi obbligatori";
+    }
+  }
 
+  /* check if are this chars  */
+  foreach ($args as $x) {
+    if (preg_match("/([<|>])/", $x)) {
+      return "Caratteri non consentiti";
+    }
+  }
+
+  /* check email structure */
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    return "E-mail non valida";
+  }
+
+  /* check if email is already used */
+  $stmt = $connection->prepare("SELECT email FROM utenti WHERE email = ?");
+  $stmt->bind_param("s", $email);
+  $stmt->execute();
+  $res = $stmt->get_result();
+  $data = $res->fetch_assoc();
+
+  if ($data != NULL)
+    return "E-mail inserita è già presente nel nostro sistema";
+
+  if (strlen($name) > 45)
+    return "Il campo nome è troppo lungo";
+
+  if (strlen($lastname) > 45)
+    return "Il campo cognome è troppo lungo";
+
+  /* hashed password */
+  $hashed_psw = password_hash($password, PASSWORD_DEFAULT);
+
+  $stmt = $connection->prepare("INSERT INTO utenti (nome, cognome, email, password) VALUES (?,?,?,?)");
+  $stmt->bind_param("ssss", $name, $lastname, $email, $hashed_psw);
+  $stmt->execute();
+  if ($stmt->affected_rows != 1)
+    return "Si è verificato un errore, si prega di riprovare";
+  else
+    return "Registrazione avvenuta con successo";
+}
+
+/**
+ * user logout
+ */
+function logout(){
+  session_destroy();
+  header("location: index.php");
+  exit();
+}
+
+function get_events($email){
+  $connection = connect();
+
+  $res = mysqli_query($connection,"SELECT attendees, data_evento, nome_evento FROM eventi WHERE attendees LIKE '%$email%'" );
+
+  $output = array();
+  if (mysqli_num_rows($res) > 0) {
+    while($row = mysqli_fetch_assoc($res)) {
+      array_push($output,$row);
+    }
+  }
+  return $output;
 }

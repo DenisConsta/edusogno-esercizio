@@ -24,12 +24,12 @@
     </div>
     
     <p class="error">
-      <?php echo @$res; ?>
+      <?php echo @$res;?>
     </p>
     <button type="submit" name="submit" class="btn w-100">Accedi</button>
 
     <h3 class="cta">
-      Non hai ancora un profilo? <a href="#">Registrati</a>
+      Non hai ancora un profilo? <a href="signup.php">Registrati</a>
     </h3>
 
     <h3 class="cta">Password dimenticata ? <a href="#">Reset password</a> </h3>
