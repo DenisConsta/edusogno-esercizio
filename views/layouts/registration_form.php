@@ -11,22 +11,24 @@
     <!-- last name -->
     <div class="form-control flex-col w-100 pb-5">
       <label class="form-label pb-3" for="lastname">Inserisci il tuo cognome</label>
-      <input type="text" id="lastname" name="lastname" class="form-input" value="<?php echo @$_POST['lastname']; ?>"
+      <input type="text" id="lastname" name="lastname" class="form-input" value="<?php echo @$_POST['lastname'];?>"
         placeholder="Rossi" />
     </div>
 
     <!-- E-mail -->
     <div class="form-control flex-col w-100 pb-5">
       <label class="form-label pb-3" for="email">Inserisci l'e-mail</label>
-      <input type="email" id="email" name="email" class="form-input" value="<?php echo @$_POST['email']; ?>"
+      <input type="email" id="email" name="email" class="form-input" value="<?php echo @$_POST['email'];?>"
         placeholder="name@example.com" />
     </div>
 
     <!-- Password -->
-    <div class="form-control flex-col w-100 pb-5">
+    <div class="form-control flex-col w-100 pb-5 relative">
       <label class="form-label pb-3" for="password">Inserisci la password</label>
-      <input type="password" id="password" name="password" class="form-input" value="<?php echo @$_POST['password']; ?>"
+      <input type="password" id="password" name="password" class="form-input" value="<?php echo @$_POST['password'];?>"
         placeholder="Scrivila qui" />
+        <i class="fa-solid fa-eye" id="eye"></i>
+
     </div>
 
     <button type="submit" name="submit" class="btn w-100">Registrati</button>
@@ -41,7 +43,7 @@
     <?php
     if (@$response == "success") {
       ?>
-      <p class="success">Your registration was successful</p>
+      <p class="success"></p>
       <?php
     } else {
       ?>

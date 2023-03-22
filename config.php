@@ -5,4 +5,4 @@
   define('SERVER', 'localhost');
   define('USERNAME', 'root');
   define('PASSWORD', 'root');
-  define('DATABASE', 'edusogno');
+  define('DATABASE', 'test_edu');

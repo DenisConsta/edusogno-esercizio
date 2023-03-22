@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . "/functions.php";
 if (isset($_POST['submit'])) {
     $res = login($_POST['email'], $_POST['password']);

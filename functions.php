@@ -1,4 +1,12 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+require 'PHPMailer/src/Exception.php';
+
 require __DIR__ . "/config.php";
 
 /**
@@ -17,7 +25,7 @@ function connect()
     $message = "{$error} [{$error_data}] \r\n";
     file_put_contents("db_log.txt", $message, FILE_APPEND);
     return false;
-  /* success  */
+    /* success  */
   } else {
     $connection->set_charset("utf8mb4");
     return $connection;
@@ -52,12 +60,12 @@ function login($email, $password)
   if ($data == NULL)
     return "Errore nelle credenziali inserite";
 
-    /* check if psw match with hashed_psw */
+  /* check if psw match with hashed_psw */
   if (password_verify($password, $data["password"]) == FALSE)
     return "Errore nelle credenziali inserite";
   else {
     $_SESSION['email'] = $email;
-    $_SESSION['name'] = $data["nome"];    
+    $_SESSION['name'] = $data["nome"];
     header("location: account.php");
     exit();
   }
@@ -107,7 +115,7 @@ function register($email, $name, $lastname, $password)
   $data = $res->fetch_assoc();
 
   if ($data != NULL)
-    return "E-mail inserita è già presente nel nostro sistema";
+    return "l'e-mail inserita è già presente nel nostro sistema";
 
   if (strlen($name) > 45)
     return "Il campo nome è troppo lungo";
@@ -130,22 +138,112 @@ function register($email, $name, $lastname, $password)
 /**
  * user logout
  */
-function logout(){
+function logout()
+{
   session_destroy();
   header("location: index.php");
   exit();
 }
 
-function get_events($email){
+/* return user's events from DB */
+function get_events($email)
+{
   $connection = connect();
 
-  $res = mysqli_query($connection,"SELECT attendees, data_evento, nome_evento FROM eventi WHERE attendees LIKE '%$email%'" );
+  $res = mysqli_query($connection, "SELECT DISTINCT data_evento, nome_evento FROM eventi WHERE attendees LIKE '%$email%'");
 
   $output = array();
   if (mysqli_num_rows($res) > 0) {
-    while($row = mysqli_fetch_assoc($res)) {
-      array_push($output,$row);
+    while ($row = mysqli_fetch_assoc($res)) {
+      array_push($output, $row);
+    }
+  }  
+  return $output;
+}
+
+/**
+ * send email reset password with PHPMailer
+ * @param string $email
+ */
+function sendResetMail($email)
+{
+  $connection = connect();
+  $exist = mysqli_query($connection,"SELECT email FROM utenti WHERE email = '$email'");
+  $exist = mysqli_fetch_assoc($exist);
+  if($exist == NULL){
+    header("location: index.php");
+    $_SESSION['message'] = "L'e-mail inserita non &egrave; presente nel nostro sistema";
+    exit();
+  }
+
+  $code = uniqid(true);
+  $query = mysqli_query($connection, "INSERT INTO pswreset (code, email) VALUES ('$code', '$email')");
+  if (!$query) {
+    header("location: index.php");
+    $_SESSION['message'] = "Errore nella generazione della richiesta, riprovare";
+    exit();
+  }
+
+  $mail = new PHPMailer;
+
+  $mail->isSMTP();
+  $mail->SMTPAuth = true;
+  $mail->Host = 'smtp.gmail.com';
+  $mail->SMTPSecure = 'ssl';
+  $mail->Port = 465;
+  //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+
+  $mail->Username = "tt4973684@gmail.com";
+  $mail->Password = "klgzfgheazlsvzxg";
+
+  $mail->setFrom('tt4973684@gmail.com', 'Edusogno');
+  $mail->addAddress($email);
+  $mail->isHTML();
+  $mail->addReplyTo('no-reply.tt4973684@gmail.com', 'No reply');
+
+  $url = "http://" . $_SERVER["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/reset_psw.php?code=$code";
+  $mail->Subject = "Recupero password Edusogno";
+  $mail->Body = "Per il reset della password clicca qui <a href='$url'>link</a>";
+
+  if ($mail->send())
+    return "L'email di recupero è stata inoltrata, controlla la casella di posta";
+  else
+    return "Si sono verificati degli errori, riprova.";
+}
+
+/* check the code  */
+function verifyCode()
+{
+  $connection = connect();
+  if (!isset($_GET['code']))
+    exit("Page not found :(");
+
+  $code = $_GET['code'];
+  $get_email = mysqli_query($connection, "SELECT email FROM pswreset WHERE code = '$code'");
+  if (mysqli_num_rows($get_email) == 0)
+    exit("Page not found :(");
+}
+
+/* update user's password */
+function updatePassword()
+{
+  $connection = connect();
+  if (isset($_POST['password'])) {
+    $psw = $_POST['password'];
+    $hashed_psw = password_hash($psw, PASSWORD_DEFAULT);
+
+    $code = $_GET['code'];
+    $get_email = mysqli_query($connection, "SELECT email FROM pswreset WHERE code = '$code'");
+    $get_email = mysqli_fetch_assoc($get_email)['email'];
+
+    $query = mysqli_query($connection, "UPDATE utenti SET password = '$hashed_psw' WHERE email = '$get_email'");
+
+    if ($query) {
+      $query = mysqli_query($connection, "DELETE FROM pswreset WHERE code = '$code'");
+      header("location: index.php");
+      $_SESSION['message'] = "Password aggiornata correttamente";
+      exit();
+
     }
   }
-  return $output;
 }

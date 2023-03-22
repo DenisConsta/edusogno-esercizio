@@ -12,19 +12,27 @@
     <!-- E-mail -->
     <div class="form-control flex-col w-100 pb-5">
       <label class="form-label pb-3" for="email">Inserisci l'e-mail</label>
-      <input type="email" name="email" id="email" class="form-input" value="<?php echo @$_POST['email']; ?>"
+      <input type="email" name="email" id="email" class="form-input" value="<?php echo @$_POST['email'];?>"
         placeholder="name@example.com" />
     </div>
 
     <!-- Password -->
-    <div class="form-control flex-col w-100 pb-5">
+    <div class="form-control flex-col w-100 pb-5 relative">
       <label class="form-label pb-3" for="password">Inserisci la password</label>
-      <input type="password" name="password" id="password"  class="form-input" value="<?php echo @$_POST['password'];?> "
+      <input type="password" name="password" id="password" class="form-input" value="<?php echo @$_POST['password'];?> "
         placeholder="Scrivila qui " />
+        <i class="fa-solid fa-eye" id="eye"></i>
     </div>
     
     <p class="error">
-      <?php echo @$res;?>
+      <?php 
+        if(isset($res))
+          echo @$res;
+        else {
+          echo @$_SESSION['message'];
+          $_SESSION['message'] = '';
+        }
+      ?>
     </p>
     <button type="submit" name="submit" class="btn w-100">Accedi</button>
 
@@ -32,6 +40,6 @@
       Non hai ancora un profilo? <a href="signup.php">Registrati</a>
     </h3>
 
-    <h3 class="cta">Password dimenticata ? <a href="#">Reset password</a> </h3>
+    <h3 class="cta">Password dimenticata ? <a href="send_reset.php">Reset password</a> </h3>
   </form>
 </div>

@@ -81,7 +81,6 @@
 
 body {
   background-color: var(--bg-color);
-  min-height: 100vh;
 }
 
 /* nav */
@@ -174,7 +173,11 @@ nav {
 .fa-eye {
   color: var(--btn-color);
   cursor: pointer;
+  position: absolute;
+  bottom: 40%;
+  right: 0;
 }
+
 
 /* row */
 .row {
