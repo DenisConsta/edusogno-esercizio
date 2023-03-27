@@ -193,13 +193,13 @@ function sendResetMail($email)
   $mail->Port = 465;
   //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
 
-  $mail->Username = "tt4973684@gmail.com";
-  $mail->Password = "klgzfgheazlsvzxg";
+  $mail->Username = "username";
+  $mail->Password = "password";
 
-  $mail->setFrom('tt4973684@gmail.com', 'Edusogno');
+  $mail->setFrom('username', 'name');
   $mail->addAddress($email);
   $mail->isHTML();
-  $mail->addReplyTo('no-reply.tt4973684@gmail.com', 'No reply');
+  $mail->addReplyTo('no-reply.username', 'No reply');
 
   $url = "http://" . $_SERVER["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/reset_psw.php?code=$code";
   $mail->Subject = "Recupero password Edusogno";
